@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +31,7 @@ class ChatController extends Controller
             $query->where('sender_id',$user->id)
                 ->where('receiver_id',Auth::id());
         })
-        ->with(['sender_id','receiver'])
+        ->with(['sender','receiver'])
         ->orderBy('created_at','asc')
         ->get();
 
@@ -41,7 +41,7 @@ class ChatController extends Controller
         $request->validate([
            'message'=>'required|string|max:1000'
         ]);
-        $message=Message::create([
+        $message = Message::create([
             'sender_id'=>Auth::id(),
             'receiver_id'=>$user->id,
             'text'=>$request->input('message'),

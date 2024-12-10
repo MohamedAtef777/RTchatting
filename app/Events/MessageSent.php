@@ -15,11 +15,14 @@ class MessageSent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $message;
+
     /**
      * Create a new event instance.
      */
-    public function __construct(public  Message $message)
+    public function __construct(Message $message)
     {
+        $this->message = $message;
         //
     }
 
